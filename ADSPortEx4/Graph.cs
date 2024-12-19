@@ -63,4 +63,46 @@ namespace ADSPortEx4
             }
         }
 
+        // Get number of nodes
+        public int NumNodes()
+        {
+            return nodes.Count;
+        }
+
+        // Get number of edges
+        public int NumEdges()
+        {
+            return edgeCount;
+        }
+
+        // Calculate average outbound edges
+        public double AverageOutbound()
+        {
+            return edgeCount / (double)nodes.Count;
+        }
+
+        // Calculate average weight
+        public double AverageWeight()
+        {
+            double totalWeight = 0;
+            foreach (var node in nodes.Values)
+            {
+                foreach (var (_, weight) in node.GetEdgesWithWeights())
+                {
+                    totalWeight += weight;
+                }
+            }
+            return totalWeight / edgeCount;
+        }
+
+        // Get all adjacencies for a node
+        public List<T> GetAllAdjacencies(T id)
+        {
+            if (nodes.ContainsKey(id))
+            {
+                return new List<T>(nodes[id].GetAdjList());
+            }
+            return new List<T>();
+        }
+
     }
