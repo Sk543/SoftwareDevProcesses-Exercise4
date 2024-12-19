@@ -18,37 +18,48 @@ namespace ADSPortEx4
 
     class GraphNode<T>
     {
+        public T ID { get; set; }
+        private LinkedList<(GraphNode<T>, int)> adjList;
+
+        // Constructor
         public GraphNode(T id)
         {
-            throw new NotImplementedException();
+            ID = id;
+            adjList = new LinkedList<(GraphNode<T>, int)>();
         }
 
-        //Functions for EX.4A
-
-        public T ID
-        {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
-        }
-
+        // Add edge without weight
         public void AddEdge(GraphNode<T> to)
         {
-            throw new NotImplementedException();
+            adjList.AddLast((to, 0));
         }
 
-        public LinkedList<T> GetAdjList()
-        {
-            throw new NotImplementedException();
-        }
-
-        //Functions for EX.4B
-
+        // Add edge with weight
         public void AddEdgeWithWeight(GraphNode<T> to, int weight)
         {
-            throw new NotImplementedException();
+            adjList.AddLast((to, weight));
         }
 
+        // Get adjacency list
+        public LinkedList<T> GetAdjList()
+        {
+            LinkedList<T> result = new LinkedList<T>();
+            foreach (var (node, _) in adjList)
+            {
+                result.AddLast(node.ID);
+            }
+            return result;
+        }
 
-
-    }// End of class
+        // Get edges with weights
+        public LinkedList<(T, int)> GetEdgesWithWeights()
+        {
+            LinkedList<(T, int)> result = new LinkedList<(T, int)>();
+            foreach (var (node, weight) in adjList)
+            {
+                result.AddLast((node.ID, weight));
+            }
+            return result;
+        }
+    } // End of class
 }
