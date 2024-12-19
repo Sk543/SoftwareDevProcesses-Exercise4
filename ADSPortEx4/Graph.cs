@@ -105,4 +105,90 @@ namespace ADSPortEx4
             return new List<T>();
         }
 
+        // BFS traversal
+        public void BFS(T startID, ref List<T> visited)
+        {
+            if (!nodes.ContainsKey(startID)) return;
+
+            Queue<GraphNode<T>> queue = new Queue<GraphNode<T>>();
+            HashSet<T> seen = new HashSet<T>();
+
+            queue.Enqueue(nodes[startID]);
+            seen.Add(startID);
+
+            while (queue.Count > 0)
+            {
+                GraphNode<T> current = queue.Dequeue();
+                visited.Add(current.ID);
+
+                foreach (var neighbor in current.GetAdjList())
+                {
+                    if (!seen.Contains(neighbor))
+                    {
+                        queue.Enqueue(nodes[neighbor]);
+                        seen.Add(neighbor);
+                    }
+                }
+            }
+        }
+
+        // Safest route traversal
+        public void SafestRoute(T startID, ref List<T> visited)
+        {
+            // Ensure the start node exists in the graph
+            if (!nodes.ContainsKey(startID)) return;
+
+            // Use a sorted list to simulate a priority queue (since PriorityQueue may not be available)
+            SortedList<int, Queue<GraphNode<T>>> pq = new SortedList<int, Queue<GraphNode<T>>>();
+            HashSet<T> seen = new HashSet<T>();
+
+            // Helper function to enqueue elements in the priority queue
+            void Enqueue(GraphNode<T> node, int weight)
+            {
+                if (!pq.ContainsKey(weight))
+                {
+                    pq[weight] = new Queue<GraphNode<T>>();
+                }
+                pq[weight].Enqueue(node);
+            }
+
+            // Enqueue the starting node with a risk factor of 0
+            Enqueue(nodes[startID], 0);
+
+            while (pq.Count > 0)
+            {
+                // Dequeue the node with the lowest risk factor
+                int lowestWeight = pq.Keys.First();
+                GraphNode<T> current = pq[lowestWeight].Dequeue();
+
+                // Remove the queue if it's empty
+                if (pq[lowestWeight].Count == 0)
+                {
+                    pq.Remove(lowestWeight);
+                }
+
+                // Skip if the node has already been visited
+                if (seen.Contains(current.ID)) continue;
+
+                // Mark the current node as visited
+                visited.Add(current.ID);
+                seen.Add(current.ID);
+
+                // Process neighbours of the current node
+                foreach (var edge in current.GetEdgesWithWeights())
+                {
+                    var neighbourID = edge.Item1;
+                    var weight = edge.Item2;
+
+                    // Only enqueue unvisited neighbours
+                    if (!seen.Contains(neighbourID))
+                    {
+                        Enqueue(nodes[neighbourID], weight);
+                    }
+                }
+            }
+        }
     }
+    }
+    
+
