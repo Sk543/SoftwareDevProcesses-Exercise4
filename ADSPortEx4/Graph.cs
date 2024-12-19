@@ -24,77 +24,43 @@ namespace ADSPortEx4
 
     class Graph<T> where T : IComparable
     {
+        private Dictionary<T, GraphNode<T>> nodes;
+        private int edgeCount;
+
+        // Constructor
         public Graph()
         {
-            throw new NotImplementedException();
+            nodes = new Dictionary<T, GraphNode<T>>();
+            edgeCount = 0;
         }
 
-        //Functions for EX.4A
-
+        // Add node
         public void AddNode(T id)
         {
-            throw new NotImplementedException();
+            if (!nodes.ContainsKey(id))
+            {
+                nodes[id] = new GraphNode<T>(id);
+            }
         }
 
+        // Add edge without weight
         public void AddEdge(T from, T to)
         {
-            throw new NotImplementedException();
+            if (nodes.ContainsKey(from) && nodes.ContainsKey(to))
+            {
+                nodes[from].AddEdge(nodes[to]);
+                edgeCount++;
+            }
         }
 
-        public int NumNodes()
-        {
-            throw new NotImplementedException();
-        }
-
-        public int NumEdges()
-        {
-            throw new NotImplementedException();
-        }
-
-        //Functions for EX.4B
-
+        // Add edge with weight
         public void AddWeightedEdge(T from, T to, int weight)
         {
-            throw new NotImplementedException();
+            if (nodes.ContainsKey(from) && nodes.ContainsKey(to))
+            {
+                nodes[from].AddEdgeWithWeight(nodes[to], weight);
+                edgeCount++;
+            }
         }
 
-        public double AverageOutbound()
-        {
-            throw new NotImplementedException();
-        }
-
-        public double AverageWeight()
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<T> GetAllAdjacencies(T id)
-        {
-            throw new NotImplementedException();
-        }
-
-        //Functions for EX.4C
-
-        public void BFS(T startID, ref List<T> visited)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DFS(T startID, ref List<T> visited)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SafestRoute(T startID, ref List<T> visited)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        //Free space, use as needed
-
-
-
-
-    }//End of class
-}
+    }
